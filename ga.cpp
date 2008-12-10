@@ -33,11 +33,12 @@ void calcDistance(int* distances)
 {
 	for (int p = 0; p < POPULATION; p++) {
 		//draw polygons on image
-		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_RGB32);
+		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_ARGB32);
 		QPainter painter(&drawImage);
+		painter.setPen(Qt::NoPen);
 		for (int n = 0; n < POLYGONS; n++) {
 			double* polygon = population[p][n];
-			painter.setPen(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255));
+			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
 			int points[NGON*2];
 			for (int i = 0; i < NGON*2; i++)
 				points[i] = polygon[4+i]*(IMGSIZE-1);
@@ -60,6 +61,8 @@ void calcDistance(int* distances)
 			dist += diff*diff;
 		}
 		distances[p] = dist;
+		drawImage.save(QString("out")+QString(p+'0')+QString(".png"));
+		//make outputting work for images greater than 10
 	}
 }
 
@@ -78,7 +81,9 @@ int main(int argc, char* argv[])
 			population[p][i] = new double[4+2*NGON];
 			for (int j = 0; j < 4+2*NGON; j++)
 				population[p][i][j] = (double)rand()/RAND_MAX;
-			population[p][i][3] = 1.0; //FIXME: start opaque for testing
+//			population[p][i][3] = 1.0; //FIXME: start opaque for testing
 		}
 	}
+	int* distances = new int[POPULATION];
+	calcDistance(distances);
 }
