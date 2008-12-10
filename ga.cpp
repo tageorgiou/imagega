@@ -81,7 +81,7 @@ QImage drawImage(double** member)
 //population storing it in an array (of population size) passed in
 void calcDistance(int* distances)
 {
-	for (int p = 0; p < POPULATION; p++) {
+	for (int p = 0; p < (int)population.size(); p++) {
 		//draw polygons on image
 		QImage drawImg = drawImage(population[p]);
 		//distance is distance in 3-space of the colors
@@ -104,7 +104,7 @@ void calcDistance(int* distances)
 
 void initga()
 {
-	for (int p = 0; p < POPULATION; p++) {
+	for (int p = 0; p < (int)population.size(); p++) {
 		population.push_back(new double*[POLYGONS]); //TODO: presize vector?
 		for (int i = 0; i < POLYGONS; i++) {
 			population[p][i] = new double[4+2*NGON];
