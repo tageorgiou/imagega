@@ -19,7 +19,7 @@ void mutate(double** member)
 	//FIXME: out of bounds maybe?
 	int poly = rand()%POLYGONS;
 	int field           = rand()%(4+2*NGON);
-	member[poly][field] = rand();
+	member[poly][field] = (double)rand()/RAND_MAX;
 }
 
 uint distance(QImage &img1, QImage &img2)
@@ -102,5 +102,10 @@ int main(int argc, char* argv[])
 		}
 	}
 	int* distances = new int[POPULATION];
-	calcDistance(distances);
+	int gen = 0;
+	while (true) {
+		printf("generation %d\n",gen);
+		mutate(population[0]);
+		calcDistance(distances);
+	}
 }
