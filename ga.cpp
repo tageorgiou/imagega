@@ -11,7 +11,16 @@ uint distance(QImage &img1, QImage &img2);
 void calcDistance(uint* distances);
 QImage drawImage(double** member);
 QImage sourceImg;
+void mutate(double** member);
 std::vector<double**> population;
+
+void mutate(double** member)
+{
+	//FIXME: out of bounds maybe?
+	int poly = rand()%POLYGONS;
+	int field           = rand()%(4+2*NGON);
+	member[poly][field] = rand();
+}
 
 uint distance(QImage &img1, QImage &img2)
 {
