@@ -31,10 +31,10 @@ void calcDistance(uint* distances)
 {
 	for (int p = 0; p < POPULATION; p++) {
 		QImage drawImage(256,256,QImage::Format_RGB32);
-		QPainter p(&drawImage);
+		QPainter painter(&drawImage);
 		for (int n = 0; n < POLYGONS; n++) {
 			double* polygon = population[p][n];
-			p.setPen(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255));
+			painter.setPen(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255));
 			int points[NGON*2];
 		}
 	}
