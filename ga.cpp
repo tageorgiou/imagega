@@ -46,7 +46,9 @@ void calcDistance(int* distances)
 			painter.drawPolygon(poly);
 		}
 		painter.end();
+
 		//distance is distance in 3-space of the colors
+		//TODO:maybe use Delta-E? http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
 		int numbytes = drawImage.numBytes();
 		int dist = 0;
 		uchar* simg = sourceImg.bits();
