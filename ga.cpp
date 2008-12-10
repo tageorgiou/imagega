@@ -13,6 +13,7 @@ QImage drawImage(double** member);
 QImage sourceImg;
 void mutate(double** member);
 std::vector<double**> population;
+void initga();
 
 void mutate(double** member)
 {
@@ -84,14 +85,8 @@ void calcDistance(int* distances)
 	}
 }
 
-int main(int argc, char* argv[])
+void initga()
 {
-	if (argc > 1)
-		sourceImg = QImage(argv[1]).scaled(IMGSIZE,IMGSIZE);
-	else {
-		printf("You must specify the image to generate as second option\n");
-		exit(1);
-	}
 	for (int p = 0; p < POPULATION; p++) {
 		population.push_back(new double*[POLYGONS]); //TODO: presize vector?
 		for (int i = 0; i < POLYGONS; i++) {
@@ -101,6 +96,17 @@ int main(int argc, char* argv[])
 //			population[p][i][3] = 1.0; //FIXME: start opaque for testing
 		}
 	}
+}
+
+int main(int argc, char* argv[])
+{
+	if (argc > 1)
+		sourceImg = QImage(argv[1]).scaled(IMGSIZE,IMGSIZE);
+	else {
+		printf("You must specify the image to generate as second option\n");
+		exit(1);
+	}
+	initga();
 	int* distances = new int[POPULATION];
 	int gen = 0;
 	while (true) {
