@@ -9,6 +9,7 @@
 
 uint distance(QImage &img1, QImage &img2);
 void calcDistance(uint* distances);
+QImage drawImage(double** member);
 QImage sourceImg;
 std::vector<double**> population;
 
@@ -27,6 +28,27 @@ uint distance(QImage &img1, QImage &img2)
 }
 //data format, [r,g,b,a,x0,y0,x1,y1,xn,yn]
 //all go from 0.0 to 1.0 to ease computation
+
+//draw a member and return it
+//TODO: make calcDistance call this
+QImage drawImage(double** member)
+{
+		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_ARGB32);
+		QPainter painter(&drawImage);
+		painter.setPen(Qt::NoPen);
+		for (int n = 0; n < POLYGONS; n++) {
+			double* polygon = member[n];
+			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
+			int points[NGON*2];
+			for (int i = 0; i < NGON*2; i++)
+				points[i] = polygon[4+i]*(IMGSIZE-1);
+			QPolygon poly;
+			poly.setPoints(NGON,points);
+			painter.drawPolygon(poly);
+		}
+		painter.end();
+		return drawImage;
+}
 
 //calculate the distance from the source image for each member of the
 //population storing it in an array (of population size) passed in
