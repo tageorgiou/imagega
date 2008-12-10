@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <vector>
 #include <QtGui>
 
 #define IMGSIZE 256
@@ -9,7 +10,7 @@
 uint distance(QImage &img1, QImage &img2);
 void calcDistance(uint* distances);
 QImage sourceImg;
-double*** population;
+std::vector<double**> population;
 
 uint distance(QImage &img1, QImage &img2)
 {
@@ -74,9 +75,8 @@ int main(int argc, char* argv[])
 		printf("You must specify the image to generate as second option\n");
 		exit(1);
 	}
-	population = new double**[POPULATION];
 	for (int p = 0; p < POPULATION; p++) {
-		population[p] = new double*[POLYGONS];
+		population.push_back(new double*[POLYGONS]); //TODO: presize vector?
 		for (int i = 0; i < POLYGONS; i++) {
 			population[p][i] = new double[4+2*NGON];
 			for (int j = 0; j < 4+2*NGON; j++)
