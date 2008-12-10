@@ -107,5 +107,6 @@ int main(int argc, char* argv[])
 		printf("generation %d\n",gen);
 		mutate(population[0]);
 		calcDistance(distances);
+		gen++;
 	}
 }
