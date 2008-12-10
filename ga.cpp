@@ -6,6 +6,7 @@
 #define NGON 4
 #define POLYGONS 50
 #define POPULATION 10
+#define SIZEOFPOLY (4+2*NGON)
 
 uint distance(QImage &img1, QImage &img2);
 void calcDistance(uint* distances);
@@ -13,6 +14,7 @@ QImage drawImage(double** member);
 QImage sourceImg;
 void mutate(double** member);
 std::vector<double**> population;
+double** breed(double** parent1, double** parent2);
 void initga();
 
 void mutate(double** member)
@@ -21,6 +23,21 @@ void mutate(double** member)
 	int poly = rand()%POLYGONS;
 	int field           = rand()%(4+2*NGON);
 	member[poly][field] = (double)rand()/RAND_MAX;
+}
+
+double** breed(double** parent1, double** parent2)
+{
+	double** child = new double*[POLYGONS];
+	for (int p = 0; p < POLYGONS; p++) {
+		child[p] = new double[SIZEOFPOLY];
+		int r = rand()&1;
+		if (r) {
+			memcpy(child[p],parent1[p],SIZEOFPOLY*sizeof(double));
+		} else {
+			memcpy(child[p],parent2[p],SIZEOFPOLY*sizeof(double));
+		}
+	}
+	return child;
 }
 
 uint distance(QImage &img1, QImage &img2)
