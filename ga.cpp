@@ -65,27 +65,13 @@ void calcDistance(int* distances)
 {
 	for (int p = 0; p < POPULATION; p++) {
 		//draw polygons on image
-		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_ARGB32);
-		QPainter painter(&drawImage);
-		painter.setPen(Qt::NoPen);
-		for (int n = 0; n < POLYGONS; n++) {
-			double* polygon = population[p][n];
-			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
-			int points[NGON*2];
-			for (int i = 0; i < NGON*2; i++)
-				points[i] = polygon[4+i]*(IMGSIZE-1);
-			QPolygon poly;
-			poly.setPoints(NGON,points);
-			painter.drawPolygon(poly);
-		}
-		painter.end();
-
+		QImage drawImg = drawImage(population[p]);
 		//distance is distance in 3-space of the colors
 		//TODO:maybe use Delta-E? http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
-		int numbytes = drawImage.numBytes();
+		int numbytes = drawImg.numBytes();
 		int dist = 0;
 		uchar* simg = sourceImg.bits();
-		uchar* dimg = drawImage.bits();
+		uchar* dimg = drawImg.bits();
 		for (int n = 0; n < numbytes; n++) {
 			if (n % 4 == 0) //TODO: make sure this works to skip alpha channel
 				continue;
@@ -93,7 +79,7 @@ void calcDistance(int* distances)
 			dist += diff*diff;
 		}
 		distances[p] = dist;
-		drawImage.save(QString("out")+QString(p+'0')+QString(".png"));
+		drawImg.save(QString("out")+QString(p+'0')+QString(".png"));
 		//make outputting work for images greater than 10
 	}
 }
