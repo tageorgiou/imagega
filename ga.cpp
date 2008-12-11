@@ -11,11 +11,13 @@
 uint distance(QImage &img1, QImage &img2);
 void calcDistance(uint* distances);
 QImage drawImage(double** member);
-QImage sourceImg;
 void mutate(double** member);
 std::vector<double**> population;
 double** breed(double** parent1, double** parent2);
 void initga();
+void gastep();
+
+QImage sourceImg;
 
 void mutate(double** member)
 {
@@ -104,13 +106,34 @@ void calcDistance(int* distances)
 
 void initga()
 {
-	for (int p = 0; p < (int)population.size(); p++) {
+	for (int p = 0; p < POPULATION; p++) {
 		population.push_back(new double*[POLYGONS]); //TODO: presize vector?
 		for (int i = 0; i < POLYGONS; i++) {
 			population[p][i] = new double[4+2*NGON];
 			for (int j = 0; j < 4+2*NGON; j++)
 				population[p][i][j] = (double)rand()/RAND_MAX;
-//			population[p][i][3] = 1.0; //FIXME: start opaque for testing
+		}
+	}
+}
+
+void gastep() {
+	int* distances = new int[population.size()];
+	calcDistance(distances);
+	//FIXME: use faster sort than selection
+	{
+		for (int n = 1; n < population.size(); n++) {
+			int min_i = n-1;
+			for (int m = n; m < population.size(); m++)
+				if (distances[m] < distances[min_i])
+					min_i = m;
+			if (n-1 != min_i) {
+				double** tmp_p = population[n-1];
+				int tmp_d = distances[n-1];
+				population[n-1] = population[min_i];
+				distances[n-1] = distances[min_i];
+				population[min_i] = tmp_p;
+				distances[min_i] = tmp_d;
+			}	
 		}
 	}
 }
@@ -124,12 +147,10 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 	initga();
-	int* distances = new int[POPULATION];
 	int gen = 0;
 	while (true) {
 		printf("generation %d\n",gen);
-		mutate(population[0]);
-		calcDistance(distances);
+		gastep();
 		gen++;
 	}
 }
