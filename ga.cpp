@@ -84,6 +84,7 @@ QImage drawImage(double** member)
 void calcDistance(int* distances)
 {
 	for (int p = 0; p < (int)population.size(); p++) {
+		printf("poly %d\n",p);
 		//draw polygons on image
 		QImage drawImg = drawImage(population[p]);
 		//distance is distance in 3-space of the colors
@@ -136,6 +137,13 @@ void gastep() {
 			}	
 		}
 	}
+#define TOKILL 4
+	for (int i = 0; i < TOKILL; i++) {
+		for (int p = 0; p < POLYGONS; p++)
+			delete population[population.size()-1-i][p];
+		population.pop_back();
+	}
+	//breed new ones
 }
 
 int main(int argc, char* argv[])
