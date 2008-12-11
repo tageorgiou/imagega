@@ -3,7 +3,7 @@
 #include <QtGui>
 
 #define IMGSIZE 256
-#define NGON 4
+#define NGON 5
 #define POLYGONS 50
 #define POPULATION 10
 #define SIZEOFPOLY (4+2*NGON)
@@ -84,7 +84,6 @@ QImage drawImage(double** member)
 void calcDistance(int* distances)
 {
 	for (int p = 0; p < (int)population.size(); p++) {
-		printf("poly %d\n",p);
 		//draw polygons on image
 		QImage drawImg = drawImage(population[p]);
 		//distance is distance in 3-space of the colors
@@ -100,7 +99,7 @@ void calcDistance(int* distances)
 			dist += diff*diff;
 		}
 		distances[p] = dist;
-		drawImg.save(QString("out")+QString(p+'0')+QString(".png"));
+		//drawImg.save(QString("out")+QString(p+'0')+QString(".png"));
 		//make outputting work for images greater than 10
 	}
 }
@@ -137,10 +136,10 @@ void gastep() {
 			}	
 		}
 	}
-#define TOKILL 4
+#define TOKILL 6
 	for (int i = 0; i < TOKILL; i++) {
 		for (int p = 0; p < POLYGONS; p++)
-			delete population[population.size()-1-i][p];
+			delete population[population.size()-1][p];
 		population.pop_back();
 	}
 	//breed new ones
@@ -148,6 +147,9 @@ void gastep() {
 	for (int n = 1; n <= TOKILL; n++) {
 		population.push_back(breed(population[0],population[n]));
 	}
+	//mutate them all
+	for (int n = 0; n < population.size(); n++)
+		mutate(population[n]);
 }
 
 int main(int argc, char* argv[])
@@ -163,6 +165,9 @@ int main(int argc, char* argv[])
 	while (true) {
 		printf("generation %d\n",gen);
 		gastep();
+		if (!(gen%100)) {
+			drawImage(population[0]).save(QString("out") + QString::number(gen) + QString(".png"));
+		}
 		gen++;
 	}
 }
