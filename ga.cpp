@@ -144,6 +144,10 @@ void gastep() {
 		population.pop_back();
 	}
 	//breed new ones
+	//FIXME: use better breeding strategy than this one
+	for (int n = 1; n <= TOKILL; n++) {
+		population.push_back(breed(population[0],population[n]));
+	}
 }
 
 int main(int argc, char* argv[])
