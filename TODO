@@ -2,4 +2,7 @@
 * Maybe make breeding dependent on position of polygons
 * Change breeding to pick a random polygon from each set instead of picking a random set to pick nth polygon from
 * Make background of image black to begin with
-* Part of mutation - assign poly color from that point or average of poly on image?
+* Part of mutation - assign poly color from that point or average of poly on image? (maybe center of bounding rect)
+* Make breeding not always use closest image
+* Make comparison use delta-e or at least sqrt(colors**2)
+* Make mutating work more
