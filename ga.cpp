@@ -5,11 +5,11 @@
 #define IMGSIZE 256
 #define NGON 5
 #define POLYGONS 50
-#define POPULATION 10
+#define POPULATION 12
 #define SIZEOFPOLY (4+2*NGON)
 
 uint distance(QImage &img1, QImage &img2);
-void calcDistance(uint* distances);
+void calcDistance(long long* distances);
 QImage drawImage(double** member);
 void mutate(double** member);
 std::vector<double**> population;
@@ -81,7 +81,7 @@ QImage drawImage(double** member)
 
 //calculate the distance from the source image for each member of the
 //population storing it in an array (of population size) passed in
-void calcDistance(int* distances)
+void calcDistance(long long* distances)
 {
 	for (int p = 0; p < (int)population.size(); p++) {
 		//draw polygons on image
@@ -89,16 +89,17 @@ void calcDistance(int* distances)
 		//distance is distance in 3-space of the colors
 		//TODO:maybe use Delta-E? http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
 		int numbytes = drawImg.numBytes();
-		int dist = 0;
+		long long dist = 0;
 		uchar* simg = sourceImg.bits();
 		uchar* dimg = drawImg.bits();
 		for (int n = 0; n < numbytes; n++) {
 			if (n % 4 == 0) //TODO: make sure this works to skip alpha channel
 				continue;
 			int diff = simg[n]-dimg[n];
-			dist += diff*diff;
+			dist += abs(diff);//*diff;
 		}
 		distances[p] = dist;
+		//printf("%lld\n",distances[p]);
 		//drawImg.save(QString("out")+QString(p+'0')+QString(".png"));
 		//make outputting work for images greater than 10
 	}
@@ -111,13 +112,13 @@ void initga()
 		for (int i = 0; i < POLYGONS; i++) {
 			population[p][i] = new double[4+2*NGON];
 			for (int j = 0; j < 4+2*NGON; j++)
-				population[p][i][j] = (double)rand()/RAND_MAX;
+				population[p][i][j] = 0.0;//(double)rand()/RAND_MAX;
 		}
 	}
 }
 
 void gastep() {
-	int* distances = new int[population.size()];
+	long long* distances = new long long[population.size()];
 	calcDistance(distances);
 	//FIXME: use faster sort than selection
 	{
@@ -128,7 +129,7 @@ void gastep() {
 					min_i = m;
 			if (n-1 != min_i) {
 				double** tmp_p = population[n-1];
-				int tmp_d = distances[n-1];
+				long long tmp_d = distances[n-1];
 				population[n-1] = population[min_i];
 				distances[n-1] = distances[min_i];
 				population[min_i] = tmp_p;
