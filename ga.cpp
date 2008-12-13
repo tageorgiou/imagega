@@ -96,7 +96,7 @@ void calcDistance(long long* distances)
 			if (n % 4 == 0) //TODO: make sure this works to skip alpha channel
 				continue;
 			int diff = simg[n]-dimg[n];
-			dist += abs(diff);//*diff;
+			dist += diff*diff;
 		}
 		distances[p] = dist;
 		//printf("%lld\n",distances[p]);
@@ -141,6 +141,7 @@ void gastep() {
 	for (int i = 0; i < TOKILL; i++) {
 		for (int p = 0; p < POLYGONS; p++)
 			delete population[population.size()-1][p];
+		delete population[population.size()-1];
 		population.pop_back();
 	}
 	//breed new ones
