@@ -3,7 +3,7 @@
 #include <QtGui>
 
 #define IMGSIZE 256
-#define NGON 5
+#define NGON 4
 #define POLYGONS 50
 #define POPULATION 12
 #define SIZEOFPOLY (4+2*NGON)
@@ -57,7 +57,7 @@ QImage drawImage(double** member)
 			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
 			int points[NGON*2];
 			for (int i = 0; i < NGON*2; i++)
-				points[i] = polygon[4+i]*(IMGSIZE-1);
+				points[i] = polygon[4+i]*IMGSIZE;
 			QPolygon poly;
 			poly.setPoints(NGON,points);
 			painter.drawPolygon(poly);
