@@ -49,7 +49,7 @@ double** breed(double** parent1, double** parent2)
 //TODO: make calcDistance call this
 QImage drawImage(double** member)
 {
-		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_ARGB32);
+		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_RGB32);
 		QPainter painter(&drawImage);
 		painter.setPen(Qt::NoPen);
 		for (int n = 0; n < POLYGONS; n++) {
@@ -76,8 +76,6 @@ long long distance(QImage img)
 		uchar* simg = sourceImg.bits();
 		uchar* dimg = img.bits();
 		for (int n = 0; n < numbytes; n++) {
-			if (n % 4 == 0) //TODO: make sure this works to skip alpha channel
-				continue;
 			int diff = simg[n]-dimg[n];
 			dist += diff*diff;
 		}
