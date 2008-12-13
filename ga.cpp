@@ -14,6 +14,7 @@ QImage drawImage(double** member);
 void mutate(double** member);
 std::vector<double**> population;
 double** breed(double** parent1, double** parent2);
+long long distance(QImage img);
 void initga();
 void gastep();
 
@@ -79,6 +80,24 @@ QImage drawImage(double** member)
 		return drawImage;
 }
 
+//calculate the distance from the source image
+long long distance(QImage img)
+{
+		//distance is distance in 3-space of the colors
+		//TODO:maybe use Delta-E? http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
+		int numbytes = img.numBytes();
+		long long dist = 0;
+		uchar* simg = sourceImg.bits();
+		uchar* dimg = img.bits();
+		for (int n = 0; n < numbytes; n++) {
+			if (n % 4 == 0) //TODO: make sure this works to skip alpha channel
+				continue;
+			int diff = simg[n]-dimg[n];
+			dist += diff*diff;
+		}
+		return dist;
+}
+
 //calculate the distance from the source image for each member of the
 //population storing it in an array (of population size) passed in
 void calcDistance(long long* distances)
@@ -86,22 +105,7 @@ void calcDistance(long long* distances)
 	for (int p = 0; p < (int)population.size(); p++) {
 		//draw polygons on image
 		QImage drawImg = drawImage(population[p]);
-		//distance is distance in 3-space of the colors
-		//TODO:maybe use Delta-E? http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
-		int numbytes = drawImg.numBytes();
-		long long dist = 0;
-		uchar* simg = sourceImg.bits();
-		uchar* dimg = drawImg.bits();
-		for (int n = 0; n < numbytes; n++) {
-			if (n % 4 == 0) //TODO: make sure this works to skip alpha channel
-				continue;
-			int diff = simg[n]-dimg[n];
-			dist += diff*diff;
-		}
-		distances[p] = dist;
-		//printf("%lld\n",distances[p]);
-		//drawImg.save(QString("out")+QString(p+'0')+QString(".png"));
-		//make outputting work for images greater than 10
+		distances[p] = distance(drawImg);
 	}
 }
 
