@@ -8,7 +8,6 @@
 #define POPULATION 12
 #define SIZEOFPOLY (4+2*NGON)
 
-uint distance(QImage &img1, QImage &img2);
 void calcDistance(long long* distances);
 QImage drawImage(double** member);
 void mutate(double** member);
@@ -43,19 +42,6 @@ double** breed(double** parent1, double** parent2)
 	return child;
 }
 
-uint distance(QImage &img1, QImage &img2)
-{
-	if (img1.numBytes() != img2.numBytes())
-		printf("Image Size Mismatch!\n");
-	int dist = 0;
-	const uchar* bytes1 = img1.bits();
-	const uchar* bytes2 = img2.bits();
-	for (int i = 0; i < img1.numBytes(); i++) {
-		uint dbyte = bytes1[i]-bytes2[i];
-		dist      += dbyte * dbyte;
-	}
-	return dist;
-}
 //data format, [r,g,b,a,x0,y0,x1,y1,xn,yn]
 //all go from 0.0 to 1.0 to ease computation
 
