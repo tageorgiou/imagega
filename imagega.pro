@@ -4,5 +4,5 @@ TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
 SOURCES += ga.cpp
-QMAKE_CXXFLAGS += -fopenmp
+QMAKE_CXXFLAGS += -fopenmp -O2
 QMAKE_LFLAGS += -fopenmp
