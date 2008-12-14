@@ -6,6 +6,7 @@
 #define POLYGONS 50
 #define POPULATION 12
 #define SIZEOFPOLY (4+2*NGON)
+#define TOKILL 6
 
 void calcDistance(long long* distances);
 QImage drawImage(double** member);
@@ -134,7 +135,6 @@ void gastep() {
 			}	
 		}
 	}
-#define TOKILL 6
 	for (int i = 0; i < TOKILL; i++) {
 		for (int p = 0; p < POLYGONS; p++)
 			delete population[population.size()-1][p];
