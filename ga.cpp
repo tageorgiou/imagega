@@ -2,7 +2,6 @@
 #include <vector>
 #include <QtGui>
 
-#define IMGSIZE 256
 #define NGON 4
 #define POLYGONS 50
 #define POPULATION 12
@@ -18,6 +17,7 @@ void initga();
 void gastep();
 
 QImage sourceImg;
+int imgw,imgh;
 
 void mutate(double** member)
 {
@@ -57,7 +57,7 @@ double** breed(double** parent1, double** parent2)
 //TODO: make calcDistance call this
 QImage drawImage(double** member)
 {
-		QImage drawImage(IMGSIZE,IMGSIZE,QImage::Format_RGB32);
+		QImage drawImage(imgw,imgh,QImage::Format_RGB32);
 		QPainter painter(&drawImage);
 		painter.setPen(Qt::NoPen);
 		for (int n = 0; n < POLYGONS; n++) {
@@ -65,7 +65,7 @@ QImage drawImage(double** member)
 			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
 			int points[NGON*2];
 			for (int i = 0; i < NGON*2; i++)
-				points[i] = polygon[4+i]*IMGSIZE;
+				points[i] = polygon[4+i]*(i?imgw:imgh);
 			QPolygon poly;
 			poly.setPoints(NGON,points);
 			painter.drawPolygon(poly);
@@ -154,9 +154,11 @@ void gastep() {
 
 int main(int argc, char* argv[])
 {
-	if (argc > 1)
-		sourceImg = QImage(argv[1]).scaled(IMGSIZE,IMGSIZE);
-	else {
+	if (argc > 1) {
+		sourceImg = QImage(argv[1]);
+		imgw = sourceImg.width();
+		imgh = sourceImg.height();
+	} else {
 		printf("You must specify the image to generate as second option\n");
 		exit(1);
 	}
