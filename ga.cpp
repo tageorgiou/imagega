@@ -22,8 +22,8 @@ int imgw,imgh;
 
 void mutate(double** member)
 {
-	int poly = rand()%POLYGONS;
-	int field           = rand()%(4+2*NGON);
+	int poly  = rand()%POLYGONS;
+	int field = rand()%(4+2*NGON);
 	if (rand()%2) {
 		member[poly][field] = (double)rand()/RAND_MAX;
 	} else {
