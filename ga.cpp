@@ -30,6 +30,7 @@ void mutate(double** member)
 double** breed(double** parent1, double** parent2)
 {
 	double** child = new double*[POLYGONS];
+	#pragma omp parallel for
 	for (int p = 0; p < POLYGONS; p++) {
 		child[p] = new double[SIZEOFPOLY];
 		int r = rand()&1;
@@ -86,6 +87,7 @@ long long distance(QImage img)
 //population storing it in an array (of population size) passed in
 void calcDistance(long long* distances)
 {
+	#pragma omp parallel for
 	for (int p = 0; p < (int)population.size(); p++) {
 		//draw polygons on image
 		QImage drawImg = drawImage(population[p]);
@@ -138,6 +140,7 @@ void gastep() {
 		population.push_back(breed(population[0],population[n]));
 	}
 	//mutate them all
+	#pragma omp parallel for
 	for (int n = 0; n < population.size(); n++)
 		mutate(population[n]);
 }
@@ -152,7 +155,7 @@ int main(int argc, char* argv[])
 	}
 	initga();
 	int gen = 0;
-	while (true) {
+	while (gen < 200) {
 		printf("generation %d\n",gen);
 		gastep();
 		if (!(gen%100)) {
