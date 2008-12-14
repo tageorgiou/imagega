@@ -150,6 +150,7 @@ void gastep() {
 	#pragma omp parallel for
 	for (int n = 0; n < population.size(); n++)
 		mutate(population[n]);
+	delete distances;
 }
 
 int main(int argc, char* argv[])
