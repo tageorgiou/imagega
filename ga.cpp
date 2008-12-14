@@ -21,10 +21,17 @@ QImage sourceImg;
 
 void mutate(double** member)
 {
-	//FIXME: out of bounds maybe?
 	int poly = rand()%POLYGONS;
 	int field           = rand()%(4+2*NGON);
-	member[poly][field] = (double)rand()/RAND_MAX;
+	if (rand()%2) {
+		member[poly][field] = (double)rand()/RAND_MAX;
+	} else {
+		member[poly][field] += (double)rand()/RAND_MAX*0.2 - 0.1;
+		if (member[poly][field] < 0.0)
+			member[poly][field] = 0.0;
+		if (member[poly][field] > 1.0)
+			member[poly][field] = 1.0;
+	}
 }
 
 double** breed(double** parent1, double** parent2)
@@ -155,7 +162,7 @@ int main(int argc, char* argv[])
 	}
 	initga();
 	int gen = 0;
-	while (gen < 200) {
+	while (true) {
 		printf("generation %d\n",gen);
 		gastep();
 		if (!(gen%100)) {
