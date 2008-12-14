@@ -66,7 +66,7 @@ QImage drawImage(double** member)
 			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
 			int points[NGON*2];
 			for (int i = 0; i < NGON*2; i++)
-				points[i] = polygon[4+i]*(i?imgw:imgh);
+				points[i] = polygon[4+i]*(i?imgh:imgw);
 			QPolygon poly;
 			poly.setPoints(NGON,points);
 			painter.drawPolygon(poly);
@@ -166,10 +166,13 @@ int main(int argc, char* argv[])
 	initga();
 	int gen = 0;
 	while (true) {
-		printf("generation %d\n",gen);
+		if (gen%100==0)
+			printf("generation %d\n",gen);
 		gastep();
-		if (!(gen%100)) {
-			drawImage(population[0]).save(QString("out") + QString::number(gen) + QString(".png"));
+		if (!(gen%1000)) {
+			QImage a = drawImage(population[0]);
+			a.save(QString("out") + QString::number(gen) + QString(".png"));
+			printf("fitness: %lld\n",distance(a));
 		}
 		gen++;
 	}
