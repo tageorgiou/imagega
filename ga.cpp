@@ -12,6 +12,7 @@
 
 void calcDistance(long long* distances);
 QImage drawImage(double** member);
+void drawSvg(double** member, char* svgname);
 void mutate(double** member);
 std::vector<double**> population;
 double** breed(double** parent1, double** parent2);
