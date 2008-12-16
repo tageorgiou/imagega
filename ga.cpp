@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <vector>
 #include <QtGui>
+#include <QSvgGenerator>
 #include <unistd.h>
 
 #define NGON 4
@@ -79,6 +80,27 @@ QImage drawImage(double** member)
 		}
 		painter.end();
 		return drawImage;
+}
+
+//convert member to svg and write it with filename
+void drawSvg(double** member, char* svgname)
+{
+		QSvgGenerator svggen;
+		svggen.setFileName(QString(svgname));
+		svggen.setSize(QSize(imgw,imgh));
+		QPainter painter(&svggen);
+		painter.setPen(Qt::NoPen);
+		for (int n = 0; n < POLYGONS; n++) {
+			double* polygon = member[n];
+			painter.setBrush(QBrush(QColor(polygon[0]*255,polygon[1]*255,polygon[2]*255,polygon[3]*255)));
+			int points[NGON*2];
+			for (int i = 0; i < NGON*2; i++)
+				points[i] = polygon[4+i]*(i?imgh:imgw);
+			QPolygon poly;
+			poly.setPoints(NGON,points);
+			painter.drawPolygon(poly);
+		}
+		painter.end();
 }
 
 //calculate the distance from the source image
@@ -176,6 +198,7 @@ void runga()
 		}
 		gen++;
 	}
+	drawSvg(population[0],"output.svg");
 }
 
 int main(int argc, char* argv[])

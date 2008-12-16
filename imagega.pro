@@ -1,4 +1,5 @@
 CONFIG += qt debug
+QT += svg
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
