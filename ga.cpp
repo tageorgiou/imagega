@@ -12,7 +12,7 @@
 
 void calcDistance(long long* distances);
 QImage drawImage(double** member);
-void drawSvg(double** member, char* svgname);
+void drawSvg(double** member, const char* svgname);
 void mutate(double** member);
 std::vector<double**> population;
 double** breed(double** parent1, double** parent2);
@@ -84,7 +84,7 @@ QImage drawImage(double** member)
 }
 
 //convert member to svg and write it with filename
-void drawSvg(double** member, char* svgname)
+void drawSvg(double** member, const char* svgname)
 {
 		QSvgGenerator svggen;
 		svggen.setFileName(QString(svgname));
