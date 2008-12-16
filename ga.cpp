@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <vector>
 #include <QtGui>
+#include <unistd.h>
 
 #define NGON 4
 #define POLYGONS 50
@@ -20,6 +21,7 @@ void runga();
 
 QImage sourceImg;
 int imgw,imgh;
+int gens = -1, fitness = -1;
 
 void mutate(double** member)
 {
@@ -157,7 +159,7 @@ void gastep() {
 void runga()
 {
 	int gen = 0;
-	while (true) {
+	while (gens >= 0 && gen <= gens) {
 		if (gen%100==0)
 			printf("generation %d\n",gen);
 		gastep();
@@ -169,15 +171,40 @@ void runga()
 		gen++;
 	}
 }
+
 int main(int argc, char* argv[])
 {
-	if (argc > 1) {
-		sourceImg = QImage(argv[1]);
-		imgw = sourceImg.width();
-		imgh = sourceImg.height();
-	} else {
-		printf("You must specify the image to generate as second option\n");
-		exit(1);
+	int opt;
+	while ((opt = getopt(argc,argv, "g:")) != -1) {
+		switch (opt) {
+			//generation limit
+			case 'g':
+				gens = atoi(optarg);
+				if (gens == 0) {
+					fprintf(stderr, "You must specify a generation limit with -g, for example -g 100\n");
+					exit(1);
+				} else if (gens < 0) {
+					fprintf(stderr, "You must specify a postive number of generations\n");
+					exit(1);
+				}
+					fprintf(stderr, "Running with %d generations\n", gens);
+				break;
+		}
 	}
+	if (optind >= argc) {
+		fprintf(stderr, "Expected source image after options\n");
+		exit(EXIT_FAILURE);
+	}
+	FILE* image = fopen(argv[optind],"r");
+	if (!image) {
+		fprintf(stderr, "Image %s does not exist\n", argv[optind]);
+		exit(EXIT_FAILURE);
+	}
+	fclose(image);
+
+	sourceImg = QImage(argv[optind]);
+	imgw = sourceImg.width();
+	imgh = sourceImg.height();
 	initga();
+	runga();
 }
