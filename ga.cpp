@@ -153,17 +153,8 @@ void gastep() {
 	delete distances;
 }
 
-int main(int argc, char* argv[])
+void runga()
 {
-	if (argc > 1) {
-		sourceImg = QImage(argv[1]);
-		imgw = sourceImg.width();
-		imgh = sourceImg.height();
-	} else {
-		printf("You must specify the image to generate as second option\n");
-		exit(1);
-	}
-	initga();
 	int gen = 0;
 	while (true) {
 		if (gen%100==0)
@@ -176,4 +167,16 @@ int main(int argc, char* argv[])
 		}
 		gen++;
 	}
+}
+int main(int argc, char* argv[])
+{
+	if (argc > 1) {
+		sourceImg = QImage(argv[1]);
+		imgw = sourceImg.width();
+		imgh = sourceImg.height();
+	} else {
+		printf("You must specify the image to generate as second option\n");
+		exit(1);
+	}
+	initga();
 }
