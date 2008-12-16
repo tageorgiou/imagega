@@ -19,10 +19,12 @@ void initga();
 void gastep();
 void runga();
 
-QImage sourceImg;
-int imgw,imgh;
-int gens = -1, fitness = -1;
+QImage sourceImg; //image to match
+int imgw,imgh; //dimensions of image
+int gens = -1, fitness = -1; //fitness and generation limit
 
+//given a population member, randomly mutate one aspect of it,
+//either by changing it a small amount or completely changing it
 void mutate(double** member)
 {
 	int poly  = rand()%POLYGONS;
@@ -38,6 +40,8 @@ void mutate(double** member)
 	}
 }
 
+//generate a hybrid of two members using the probably poor
+//scheme of just randomly choosing polygons
 double** breed(double** parent1, double** parent2)
 {
 	double** child = new double*[POLYGONS];
@@ -57,8 +61,7 @@ double** breed(double** parent1, double** parent2)
 //data format, [r,g,b,a,x0,y0,x1,y1,xn,yn]
 //all go from 0.0 to 1.0 to ease computation
 
-//draw a member and return it
-//TODO: make calcDistance call this
+//rasterize a member and return it
 QImage drawImage(double** member)
 {
 		QImage drawImage(imgw,imgh,QImage::Format_RGB32);
@@ -106,6 +109,7 @@ void calcDistance(long long* distances)
 	}
 }
 
+//initialize the population of the genetic algorithm
 void initga()
 {
 	for (int p = 0; p < POPULATION; p++) {
@@ -118,6 +122,7 @@ void initga()
 	}
 }
 
+//run an iteration of the genetic algorithm
 void gastep() {
 	long long* distances = new long long[population.size()];
 	calcDistance(distances);
@@ -156,6 +161,7 @@ void gastep() {
 	delete distances;
 }
 
+//command passes to this to do the running of the genetic algorithm
 void runga()
 {
 	int gen = 0;
