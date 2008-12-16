@@ -16,6 +16,7 @@ double** breed(double** parent1, double** parent2);
 long long distance(QImage img);
 void initga();
 void gastep();
+void runga();
 
 QImage sourceImg;
 int imgw,imgh;
