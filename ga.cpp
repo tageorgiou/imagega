@@ -182,10 +182,10 @@ int main(int argc, char* argv[])
 				gens = atoi(optarg);
 				if (gens == 0) {
 					fprintf(stderr, "You must specify a generation limit with -g, for example -g 100\n");
-					exit(1);
+					exit(EXIT_FAILURE);
 				} else if (gens < 0) {
 					fprintf(stderr, "You must specify a postive number of generations\n");
-					exit(1);
+					exit(EXIT_FAILURE);
 				}
 					fprintf(stderr, "Running with %d generations\n", gens);
 				break;
