@@ -3,3 +3,8 @@ GCC 4.2 or greater is required in order to have openmp support
 Compile with:
 	qmake
 	make
+
+Usage:
+	imagega [-g] IMAGE
+	-g N
+		end the program after N generations
